@@ -27,7 +27,7 @@ func NewAPI(config *config.Config, logger *slog.Logger) *API {
 func (api *API) Run() error {
 	api.Logger.Info("Server started in port " + api.Config.Port)
 
-	err := api.Router.Run("localhost:" + api.Config.Port)
+	err := api.Router.Run(api.Config.Ip + ":" + api.Config.Port)
 	if err != nil {
 		return err
 	}

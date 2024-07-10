@@ -22,7 +22,7 @@ func main() {
 
 	server := api.NewAPI(config, logger)
 
-    if err := server.Run(); err != nil {
+	if err := server.Run(); err != nil {
 		logger.Error(err.Error())
 		os.Exit(1)
 	}

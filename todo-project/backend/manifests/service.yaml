@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-project-backend-svc
+spec:
+  type: NodePort
+  selector:
+    app: todo-project
+  ports:
+    - nodePort: 30080
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
