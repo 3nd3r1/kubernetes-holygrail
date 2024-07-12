@@ -15,7 +15,8 @@ spec:
     spec:
       volumes:
         - name: data-volume
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: log-output-ping-pong-pvc
       containers:
         - name: reader
           image: 3nd3r1/log-output-reader:latest

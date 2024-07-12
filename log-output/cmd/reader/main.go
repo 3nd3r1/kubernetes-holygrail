@@ -17,9 +17,11 @@ func hash(s string) string {
 
 func main() {
 	var timestamp string
+	var requests string
+
 	router := gin.Default()
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.String(200, timestamp+" "+hash(timestamp))
+		ctx.String(200, timestamp+" "+hash(timestamp)+"\n"+"Ping / Pongs: "+requests)
 	})
 
 	go func() {
@@ -32,6 +34,12 @@ func main() {
 				timestamp = string(data)
 				fmt.Println(timestamp + " " + hash(timestamp))
 			}
+			data, err = os.ReadFile("/usr/src/app/data/pingpong.txt")
+			if err != nil {
+				panic(err)
+			}
+			requests = string(data)
+
 			time.Sleep(1 * time.Second)
 		}
 	}()
