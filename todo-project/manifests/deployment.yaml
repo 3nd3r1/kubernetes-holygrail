@@ -3,17 +3,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todo-project-dep
-  namespace: project
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: todo-project
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
         app: todo-project
     spec:
+      securityContext:
+        fsGroup: 2000
       volumes:
         - name: next-cache
           emptyDir: {}
@@ -22,7 +25,7 @@ spec:
             claimName: todo-project-data-pvc
       containers:
         - name: frontend
-          image: 3nd3r1/todo-project-frontend:latest
+          image: TODO_PROJECT_FRONTEND/IMAGE
           ports:
             - containerPort: 3000
           env:
@@ -32,7 +35,7 @@ spec:
             - name: next-cache
               mountPath: /usr/src/app/.next/cache
         - name: backend
-          image: 3nd3r1/todo-project-backend:latest
+          image: TODO_PROJECT_BACKEND/IMAGE
           ports:
             - containerPort: 8080
           env:
@@ -53,7 +56,10 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
         - name: imagenator
-          image: 3nd3r1/todo-project-imagenator:latest
+          image: TODO_PROJECT_IMAGENATOR/IMAGE
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 2000
           ports:
             - containerPort: 5000
           env:

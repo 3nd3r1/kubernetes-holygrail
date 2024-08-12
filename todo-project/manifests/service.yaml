@@ -3,9 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: todo-project-svc
-  namespace: project
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: todo-project
   ports:
@@ -26,7 +25,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: todo-project-database-svc
-  namespace: project
 spec:
   type: ClusterIP
   selector:

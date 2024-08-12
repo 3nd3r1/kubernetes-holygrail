@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"todo-project-backend/internal/api/handlers"
 	"todo-project-backend/internal/repositories"
 
@@ -13,6 +14,10 @@ func SetupRoutes(router *gin.Engine) error {
 		return err
 	}
 	todoHandler := handlers.NewTodoHandler(todoRepository)
+
+	router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "ok")
+	})
 
 	apiGroup := router.Group("/api")
 	{

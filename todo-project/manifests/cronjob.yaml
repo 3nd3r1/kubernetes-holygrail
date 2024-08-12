@@ -3,14 +3,11 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: todo-project-wikipedia-todo-cronjob
-  namespace: project
 spec:
   schedule: "0 * * * *"
   jobTemplate:
     spec:
       template:
-        metadata:
-          namespace: project
         spec:
           containers:
             - name: wikipedia

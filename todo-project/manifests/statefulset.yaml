@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: todo-project-database-stset
-  namespace: project
 spec:
   serviceName: todo-project-database-svc
   replicas: 1
@@ -36,12 +35,12 @@ spec:
           volumeMounts:
             - name: todo-project-database-pgdata
               mountPath: /var/lib/postgresql/data
+              subPath: todo-project-pgdata
   volumeClaimTemplates:
     - metadata:
         name: todo-project-database-pgdata
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
         resources:
           requests:
             storage: 100Mi

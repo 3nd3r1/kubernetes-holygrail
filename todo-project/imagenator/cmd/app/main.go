@@ -68,6 +68,9 @@ func main() {
 	}
 
 	router := gin.Default()
+	router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "ok")
+	})
 	router.StaticFile("/imagenator/image", dataDir+"/image.jpg")
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}

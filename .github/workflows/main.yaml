@@ -1,0 +1,72 @@
+---
+name: Release application
+
+on:
+  push:
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: dwk-cluster
+  GKE_ZONE: europe-north1-a
+  BACKEND_IMAGE: todo-project-backend
+  FRONTEND_IMAGE: todo-project-frontend
+  IMAGENATOR_IMAGE: todo-project-imagenator
+  DEPLOYMENT: todo-project-dep
+  BRANCH: ${{ github.ref_name }}
+
+jobs:
+  build-publish-deploy:
+    name: Build, Publish and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name: Configure Docker
+        run: gcloud --quiet auth configure-docker
+
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2
+
+      - name: Install sops
+        uses: mdgreenwald/mozilla-sops-action@v1.6.0
+        id: install
+
+      - name: Build
+        working-directory: ./todo-project
+        run: |-
+          docker build -t "gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./backend/build/Dockerfile ./backend
+          docker build -t "gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./frontend/build/Dockerfile ./frontend
+          docker build -t "gcr.io/${PROJECT_ID}/${IMAGENATOR_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./imagenator/build/Dockerfile ./imagenator
+
+      - name: Publish
+        run: |-
+          docker push "gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}"
+          docker push "gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}"
+          docker push "gcr.io/${PROJECT_ID}/${IMAGENATOR_IMAGE}:${BRANCH}-${GITHUB_SHA}"
+
+      - name: Deploy
+        working-directory: ./todo-project
+        run: |-
+          sops --decrypt ./manifests/secrets/secret.enc.yaml | kubectl apply -f -
+          kustomize edit set image TODO_PROJECT_BACKEND/IMAGE=gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}
+          kustomize edit set image TODO_PROJECT_FRONTEND/IMAGE=gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}
+          kustomize edit set image TODO_PROJECT_IMAGENATOR/IMAGE=gcr.io/${PROJECT_ID}/${IMAGENATOR_IMAGE}:${BRANCH}-${GITHUB_SHA}
+          kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment ${DEPLOYMENT}
+          kubectl get services -o wide

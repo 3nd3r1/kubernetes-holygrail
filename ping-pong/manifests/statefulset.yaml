@@ -36,7 +36,7 @@ spec:
           volumeMounts:
             - name: ping-pong-database-pgdata
               mountPath: /var/lib/postgresql/data
-              subPath: pgdata
+              subPath: ping-pong-pgdata
   volumeClaimTemplates:
     - metadata:
         name: ping-pong-database-pgdata
