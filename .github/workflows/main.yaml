@@ -63,6 +63,11 @@ jobs:
       - name: Deploy
         working-directory: ./todo-project
         run: |-
+          if [ ${BRANCH} != 'main' ]; then
+            kubectl create namespace ${BRANCH} || true
+            kubectl config set-context --current --namespace=${BRANCH}
+            kustomize edit set namespace ${BRANCH}
+          fi
           sops --decrypt ./manifests/secrets/secret.enc.yaml | kubectl apply -f -
           kustomize edit set image TODO_PROJECT_BACKEND/IMAGE=gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}
           kustomize edit set image TODO_PROJECT_FRONTEND/IMAGE=gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}
