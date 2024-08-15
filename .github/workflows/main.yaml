@@ -11,6 +11,7 @@ env:
   BACKEND_IMAGE: todo-project-backend
   FRONTEND_IMAGE: todo-project-frontend
   IMAGENATOR_IMAGE: todo-project-imagenator
+  BACKUP_AGENT_IMAGE: todo-project-backup-agent
   DEPLOYMENT: todo-project-dep
   BRANCH: ${{ github.ref_name }}
 
@@ -53,12 +54,14 @@ jobs:
           docker build -t "gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./backend/build/Dockerfile ./backend
           docker build -t "gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./frontend/build/Dockerfile ./frontend
           docker build -t "gcr.io/${PROJECT_ID}/${IMAGENATOR_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./imagenator/build/Dockerfile ./imagenator
+          docker build -t "gcr.io/${PROJECT_ID}/${BACKUP_AGENT_IMAGE}:${BRANCH}-${GITHUB_SHA}" -f ./backup-agent/build/Dockerfile ./backup-agent
 
       - name: Publish
         run: |-
           docker push "gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}"
           docker push "gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}"
           docker push "gcr.io/${PROJECT_ID}/${IMAGENATOR_IMAGE}:${BRANCH}-${GITHUB_SHA}"
+          docker push "gcr.io/${PROJECT_ID}/${BACKUP_AGENT_IMAGE}:${BRANCH}-${GITHUB_SHA}"
 
       - name: Deploy
         working-directory: ./todo-project
@@ -72,6 +75,7 @@ jobs:
           kustomize edit set image TODO_PROJECT_BACKEND/IMAGE=gcr.io/${PROJECT_ID}/${BACKEND_IMAGE}:${BRANCH}-${GITHUB_SHA}
           kustomize edit set image TODO_PROJECT_FRONTEND/IMAGE=gcr.io/${PROJECT_ID}/${FRONTEND_IMAGE}:${BRANCH}-${GITHUB_SHA}
           kustomize edit set image TODO_PROJECT_IMAGENATOR/IMAGE=gcr.io/${PROJECT_ID}/${IMAGENATOR_IMAGE}:${BRANCH}-${GITHUB_SHA}
+          kustomize edit set image TODO_PROJECT_BACKUP_AGENT/IMAGE=gcr.io/${PROJECT_ID}/${BACKUP_AGENT_IMAGE}:${BRANCH}-${GITHUB_SHA}
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment ${DEPLOYMENT}
           kubectl get services -o wide

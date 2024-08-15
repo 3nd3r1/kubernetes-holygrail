@@ -1,3 +1,3 @@
 key.txt
-sa-private-key.json
+sa-private-key-*.json
 todo-project/manifests/secrets/secret.yaml

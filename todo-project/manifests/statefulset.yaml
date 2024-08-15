@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: todo-project-database-stset
+  labels:
+    project: todo-project
 spec:
   serviceName: todo-project-database-svc
   replicas: 1
@@ -39,6 +41,8 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: todo-project-database-pgdata
+        labels:
+          project: todo-project
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:

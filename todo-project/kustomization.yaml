@@ -15,3 +15,5 @@ images:
     newName: 3nd3r1/todo-project-frontend
   - name: TODO_PROJECT_IMAGENATOR/IMAGE
     newName: 3nd3r1/todo-project-imagenator
+  - name: TODO_PROJECT_BACKUP_AGENT/IMAGE
+    newName: 3nd3r1/todo-project-backup-agent
