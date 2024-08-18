@@ -21,6 +21,10 @@ spec:
           image: postgres:13
           ports:
             - containerPort: 5432
+          resources:
+            limits:
+              cpu: "100m"
+              memory: "200Mi"
           env:
             - name: POSTGRES_USER
               valueFrom:
