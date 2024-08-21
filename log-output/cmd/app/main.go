@@ -21,8 +21,33 @@ func hash(s string) string {
 func main() {
 	var timestamp string
 
+	isReady := false
+
+	go func() {
+		for {
+			res, err := http.Get("http://ping-pong-svc:2345/pingpong")
+			if err == nil && res.StatusCode == 200 {
+				isReady = true
+				break
+			}
+		}
+	}()
+
 	router := gin.Default()
+	router.GET("/healthz", func(ctx *gin.Context) {
+		if !isReady {
+			ctx.String(500, "not ready")
+			return
+		}
+		ctx.String(200, "ok")
+	})
+
 	router.GET("/", func(ctx *gin.Context) {
+		if !isReady {
+			ctx.String(500, "not ready")
+			return
+		}
+
 		res, err := http.Get("http://ping-pong-svc:2345/pingpong")
 		if err != nil {
 			ctx.String(500, err.Error())

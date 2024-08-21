@@ -13,8 +13,9 @@ import (
 func main() {
 	var err error
 
-	router := gin.Default()
 	requests := 0
+
+	dbReady := false
 
 	dbUser := os.Getenv("POSTGRES_USER")
 	dbPass := os.Getenv("POSTGRES_PASSWORD")
@@ -28,37 +29,58 @@ func main() {
 	}
 	defer db.Close()
 
-	for {
-		_, err = db.Query("CREATE TABLE IF NOT EXISTS ping_pong(requests int)")
-		if err != nil {
-			fmt.Println("Error connecting to database: " + err.Error())
-			fmt.Println("Retrying in 10 seconds...")
-			time.Sleep(10 * time.Second)
-			continue
+	go func() {
+		for {
+			_, err = db.Query("CREATE TABLE IF NOT EXISTS ping_pong(requests int)")
+			if err != nil {
+				fmt.Println("Error connecting to database: " + err.Error())
+				fmt.Println("Retrying in 10 seconds...")
+				time.Sleep(10 * time.Second)
+				continue
+			}
+			fmt.Println("Connected to database")
+			break
 		}
-		fmt.Println("Connected to database")
-		break
-	}
 
-	var rowCount int
-	err = db.QueryRow("SELECT count(requests) FROM ping_pong").Scan(&rowCount)
-	if err != nil {
-		panic(err)
-	}
-	if rowCount == 0 {
-		_, err = db.Query("INSERT INTO ping_pong(requests) VALUES(0)")
-	} else {
-		err = db.QueryRow("SELECT requests FROM ping_pong").Scan(&requests)
-	}
-	if err != nil {
-		panic(err)
-	}
+		var rowCount int
+		err = db.QueryRow("SELECT count(requests) FROM ping_pong").Scan(&rowCount)
+		if err != nil {
+			panic(err)
+		}
+		if rowCount == 0 {
+			_, err = db.Query("INSERT INTO ping_pong(requests) VALUES(0)")
+		} else {
+			err = db.QueryRow("SELECT requests FROM ping_pong").Scan(&requests)
+		}
+		if err != nil {
+			panic(err)
+		}
+
+		dbReady = true
+	}()
+
+	router := gin.Default()
+	router.GET("/healthz", func(ctx *gin.Context) {
+		if !dbReady {
+			ctx.String(500, "not ready")
+			return
+		}
+		ctx.String(200, "ok")
+	})
 
 	router.GET("/", func(ctx *gin.Context) {
+		if !dbReady {
+			ctx.String(500, "not ready")
+			return
+		}
 		ctx.String(200, "ok")
 	})
 
 	router.GET("/pingpong", func(ctx *gin.Context) {
+		if !dbReady {
+			ctx.String(500, "not ready")
+			return
+		}
 		ctx.String(200, "pong "+fmt.Sprint(requests))
 		if ctx.Request.Header.Get("User-Agent") != "Go-http-client/1.1" {
 			err := db.QueryRow("UPDATE ping_pong SET requests=requests+1 RETURNING requests").Scan(&requests)
