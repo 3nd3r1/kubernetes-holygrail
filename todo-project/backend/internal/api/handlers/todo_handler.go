@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"net/http"
+
 	"todo-project-backend/internal/api/models"
+	"todo-project-backend/internal/database"
 	"todo-project-backend/internal/repositories"
 
 	"github.com/gin-gonic/gin"
@@ -20,6 +22,11 @@ func NewTodoHandler(tr *repositories.TodoRepository) *TodoHandler {
 
 func (th *TodoHandler) CreateTodo(ctx *gin.Context) {
 	var newTodo models.NewTodo
+
+	if !database.IsReady {
+		ctx.JSON(http.StatusServiceUnavailable, gin.H{"error": "not ready"})
+		return
+	}
 
 	if err := ctx.ShouldBindJSON(&newTodo); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -40,6 +47,11 @@ func (th *TodoHandler) CreateTodo(ctx *gin.Context) {
 }
 
 func (th *TodoHandler) GetAllTodos(ctx *gin.Context) {
+	if !database.IsReady {
+		ctx.JSON(http.StatusServiceUnavailable, gin.H{"error": "not ready"})
+		return
+	}
+
 	todos, err := th.TodoRepository.GetAll()
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

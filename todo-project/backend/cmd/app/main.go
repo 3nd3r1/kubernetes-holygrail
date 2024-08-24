@@ -5,6 +5,7 @@ import (
 	"os"
 	"todo-project-backend/internal/api"
 	"todo-project-backend/internal/config"
+	"todo-project-backend/internal/database"
 	"todo-project-backend/internal/logger"
 )
 
@@ -22,6 +23,8 @@ func main() {
 	err = logger.Init()
 	handleError(err)
 	err = config.Init(ctx)
+	handleError(err)
+	err = database.Init()
 	handleError(err)
 
 	server, err := api.NewAPI()

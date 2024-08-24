@@ -3,6 +3,7 @@ package routes
 import (
 	"net/http"
 	"todo-project-backend/internal/api/handlers"
+	"todo-project-backend/internal/database"
 	"todo-project-backend/internal/repositories"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,18 @@ func SetupRoutes(router *gin.Engine) error {
 	todoHandler := handlers.NewTodoHandler(todoRepository)
 
 	router.GET("/", func(c *gin.Context) {
+		if !database.IsReady {
+			c.String(http.StatusServiceUnavailable, "not ready")
+			return
+		}
+		c.String(http.StatusOK, "ok")
+	})
+
+	router.GET("/healthz", func(c *gin.Context) {
+		if !database.IsReady {
+			c.String(http.StatusServiceUnavailable, "not ready")
+			return
+		}
 		c.String(http.StatusOK, "ok")
 	})
 
