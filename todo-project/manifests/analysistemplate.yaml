@@ -1,0 +1,21 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: cpu-limit-monitor
+  labels:
+    project: todo-project
+spec:
+  args:
+    - name: namespace
+      value: default
+  metrics:
+    - name: cpu-limit-monitor
+      interval: 60s
+      count: 10
+      successCondition: result[0] < 5.0
+      provider:
+        prometheus:
+          address: http://kube-prometheus-stack-1725-prometheus.prometheus.svc.cluster.local:9090
+          query: |
+            sum(rate(container_cpu_usage_seconds_total{namespace="{{args.namespace}}",pod=~"todo-project-(.*)"}[1m])) * 1000

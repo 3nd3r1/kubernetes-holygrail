@@ -4,7 +4,8 @@ kind: Kustomization
 resources:
   - manifests/service.yaml
   - manifests/ingress.yaml
-  - manifests/deployment.yaml
+  - manifests/rollout.yaml
+  - manifests/analysistemplate.yaml
   - manifests/cronjob.yaml
   - manifests/statefulset.yaml
   - manifests/persistentvolumeclaim.yaml

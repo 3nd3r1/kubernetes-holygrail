@@ -1,6 +1,6 @@
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: todo-project-dep
   labels:
@@ -11,7 +11,11 @@ spec:
     matchLabels:
       app: todo-project
   strategy:
-    type: Recreate
+    canary:
+      steps:
+        - analysis:
+            templates:
+              - templateName: cpu-limit-monitor
   template:
     metadata:
       labels:
