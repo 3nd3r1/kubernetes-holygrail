@@ -46,6 +46,24 @@ func (th *TodoHandler) CreateTodo(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, createdTodo)
 }
 
+
+func (th *TodoHandler) CompleteTodo(ctx *gin.Context) {
+	if !database.IsReady {
+		ctx.JSON(http.StatusServiceUnavailable, gin.H{"error": "not ready"})
+		return
+	}
+
+	id := ctx.Param("id")
+
+	completedTodo, err := th.TodoRepository.Complete(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, completedTodo)
+}
+
 func (th *TodoHandler) GetAllTodos(ctx *gin.Context) {
 	if !database.IsReady {
 		ctx.JSON(http.StatusServiceUnavailable, gin.H{"error": "not ready"})

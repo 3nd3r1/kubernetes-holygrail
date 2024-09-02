@@ -48,3 +48,11 @@ func (tr *TodoRepository) Create(newTodo models.NewTodo) (models.Todo, error) {
 
 	return addedTodo, err
 }
+
+func (tr *TodoRepository) Complete(id string) (models.Todo, error) {
+	var completedTodo models.Todo
+	err := database.Database.QueryRow("UPDATE todos SET completed = true WHERE id = $1 RETURNING id, title, completed",
+		id).Scan(&completedTodo.Id, &completedTodo.Title, &completedTodo.Completed)
+
+	return completedTodo, err
+}

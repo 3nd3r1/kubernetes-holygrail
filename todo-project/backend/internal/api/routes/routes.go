@@ -36,6 +36,7 @@ func SetupRoutes(router *gin.Engine) error {
 	{
 		apiGroup.GET("/todos", todoHandler.GetAllTodos)
 		apiGroup.POST("/todos", todoHandler.CreateTodo)
+		apiGroup.PUT("/todos/:id", todoHandler.CompleteTodo)
 	}
 
 	return nil
