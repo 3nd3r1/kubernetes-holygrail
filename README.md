@@ -4,7 +4,7 @@ My answers for the [DevOps with Kubernetes course](https://devopswithkubernetes.
 
 ## Status
 
-Completed 2/5 parts
+Completed 3/5 parts
 
 ## DBaaS vs DIY
 
