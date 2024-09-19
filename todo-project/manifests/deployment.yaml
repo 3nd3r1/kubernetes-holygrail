@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-project-broadcaster-dep
+  labels:
+    project: todo-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-project-broadcaster
+  template:
+    metadata:
+      labels:
+        app: todo-project-broadcaster
+    spec:
+      containers:
+        - name: broadcaster
+          image: TODO_PROJECT_BROADCASTER/IMAGE
+          env:
+            - name: NATS_URL
+              value: nats://todo-project-nats:4222
+            - name: DISCORD_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: todo-project-broadcaster-secret
+                  key: DISCORD_WEBHOOK_URL

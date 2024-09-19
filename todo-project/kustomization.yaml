@@ -5,6 +5,7 @@ resources:
   - manifests/service.yaml
   - manifests/ingress.yaml
   - manifests/rollout.yaml
+  - manifests/deployment.yaml
   - manifests/analysistemplate.yaml
   - manifests/cronjob.yaml
   - manifests/statefulset.yaml
@@ -18,3 +19,5 @@ images:
     newName: 3nd3r1/todo-project-imagenator
   - name: TODO_PROJECT_BACKUP_AGENT/IMAGE
     newName: 3nd3r1/todo-project-backup-agent
+  - name: TODO_PROJECT_BROADCASTER/IMAGE
+    newName: 3nd3r1/todo-project-broadcaster

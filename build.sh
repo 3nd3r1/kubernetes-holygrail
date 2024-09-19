@@ -4,6 +4,7 @@ docker build -t 3nd3r1/todo-project-backend:latest -f ./todo-project/backend/bui
 docker build -t 3nd3r1/todo-project-frontend:latest -f ./todo-project/frontend/build/Dockerfile ./todo-project/frontend
 docker build -t 3nd3r1/todo-project-imagenator:latest -f ./todo-project/imagenator/build/Dockerfile ./todo-project/imagenator
 docker build -t 3nd3r1/todo-project-backup-agent:latest -f ./todo-project/backup-agent/build/Dockerfile ./todo-project/backup-agent
+docker build -t 3nd3r1/todo-project-broadcaster:latest -f ./todo-project/broadcaster/build/Dockerfile ./todo-project/broadcaster
 
 #docker push 3nd3r1/log-output:latest
 #docker push 3nd3r1/ping-pong:latest
@@ -11,3 +12,4 @@ docker push 3nd3r1/todo-project-backend:latest
 docker push 3nd3r1/todo-project-frontend:latest
 docker push 3nd3r1/todo-project-imagenator:latest
 docker push 3nd3r1/todo-project-backup-agent:latest
+docker push 3nd3r1/todo-project-broadcaster:latest

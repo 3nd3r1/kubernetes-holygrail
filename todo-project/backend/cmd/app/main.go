@@ -7,6 +7,7 @@ import (
 	"todo-project-backend/internal/config"
 	"todo-project-backend/internal/database"
 	"todo-project-backend/internal/logger"
+	"todo-project-backend/internal/nats"
 )
 
 func handleError(err error) {
@@ -26,6 +27,11 @@ func main() {
 	handleError(err)
 	err = database.Init()
 	handleError(err)
+	err = nats.Init()
+	handleError(err)
+
+	defer database.Connection.Close()
+	defer nats.Connection.Close()
 
 	server, err := api.NewAPI()
 	handleError(err)

@@ -81,6 +81,8 @@ spec:
               value: todo-project-database-svc
             - name: POSTGRES_PORT
               value: "5432"
+            - name: NATS_URL
+              value: nats://todo-project-nats:4222
         - name: imagenator
           image: TODO_PROJECT_IMAGENATOR/IMAGE
           securityContext:

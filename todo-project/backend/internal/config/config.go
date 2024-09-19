@@ -13,6 +13,7 @@ type EnvConfig struct {
 	PostgresUser          string `env:"POSTGRES_USER, default=postgres"`
 	PostgresPassword      string `env:"POSTGRES_PASSWORD"`
 	PostgresDatabase      string `env:"POSTGRES_DATABASE, default=postgres"`
+	NatsUrl               string `env:"NATS_URL, default=nats://localhost:4222"`
 }
 
 var Config *EnvConfig

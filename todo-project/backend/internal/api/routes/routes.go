@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"todo-project-backend/internal/api/handlers"
 	"todo-project-backend/internal/database"
+	"todo-project-backend/internal/nats"
 	"todo-project-backend/internal/repositories"
 
 	"github.com/gin-gonic/gin"
@@ -17,7 +18,7 @@ func SetupRoutes(router *gin.Engine) error {
 	todoHandler := handlers.NewTodoHandler(todoRepository)
 
 	router.GET("/", func(c *gin.Context) {
-		if !database.IsReady {
+		if !database.IsReady || !nats.IsReady {
 			c.String(http.StatusServiceUnavailable, "not ready")
 			return
 		}

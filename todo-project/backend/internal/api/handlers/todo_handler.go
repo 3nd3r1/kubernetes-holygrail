@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"todo-project-backend/internal/api/models"
 	"todo-project-backend/internal/database"
+	"todo-project-backend/internal/logger"
+	"todo-project-backend/internal/nats"
 	"todo-project-backend/internal/repositories"
 
 	"github.com/gin-gonic/gin"
@@ -43,6 +46,18 @@ func (th *TodoHandler) CreateTodo(ctx *gin.Context) {
 		return
 	}
 
+	createdTodoJson, err := json.Marshal(createdTodo)
+	if err != nil {
+		logger.Logger.Error("Error marshalling created todo: " + err.Error())
+	} else {
+		err = nats.Connection.Publish("todos", createdTodoJson)
+		if err != nil {
+			logger.Logger.Error("Error publishing created todo to nats: " + err.Error())
+		} else {
+			logger.Logger.Info("Published created todo to nats")
+		}
+	}
+
 	ctx.JSON(http.StatusCreated, createdTodo)
 }
 
@@ -59,6 +74,17 @@ func (th *TodoHandler) CompleteTodo(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+	completedTodoJson, err := json.Marshal(completedTodo)
+	if err != nil {
+		logger.Logger.Error("Error marshalling completed todo: " + err.Error())
+	} else {
+		err = nats.Connection.Publish("todos", completedTodoJson)
+		if err != nil {
+			logger.Logger.Error("Error publishing completed todo to nats: " + err.Error())
+		} else {
+			logger.Logger.Info("Published completed todo to nats")
+		}
 	}
 
 	ctx.JSON(http.StatusOK, completedTodo)
