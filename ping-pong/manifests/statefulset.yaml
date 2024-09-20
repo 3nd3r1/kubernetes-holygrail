@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: ping-pong-database-stset
+  labels:
+    project: ping-pong
 spec:
   serviceName: ping-pong-database-svc
   replicas: 1

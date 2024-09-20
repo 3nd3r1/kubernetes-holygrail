@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ping-pong-dep
+  labels:
+    project: ping-pong
 spec:
   replicas: 1
   selector:
@@ -15,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ping-pong
-          image: 3nd3r1/ping-pong:latest
+          image: PING_PONG/IMAGE
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

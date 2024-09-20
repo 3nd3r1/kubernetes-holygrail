@@ -3,7 +3,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: log-output-cm
-  namespace: applications
+  labels:
+    project: log-output
 data:
   information.txt: |
     this text is from file
