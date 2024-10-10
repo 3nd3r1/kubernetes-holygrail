@@ -1,0 +1,4 @@
+---
+- op: replace
+  path: /spec/jobTemplate/spec/template/spec/containers/0/env/6/value
+  value: "prod-todo-project-database-svc"

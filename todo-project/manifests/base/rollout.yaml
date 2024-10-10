@@ -13,6 +13,9 @@ spec:
   strategy:
     canary:
       steps:
+        - setWeight: 100
+        - pause:
+            duration: 1m
         - analysis:
             templates:
               - templateName: cpu-limit-monitor
@@ -47,6 +50,10 @@ spec:
           env:
             - name: PORT
               value: "3000"
+            - name: NEXT_PUBLIC_BACKEND_URL
+              value: "/api"
+            - name: NEXT_PUBLIC_IMAGENATOR_URL
+              value: "/imagenator/image"
           volumeMounts:
             - name: next-cache
               mountPath: /usr/src/app/.next/cache
