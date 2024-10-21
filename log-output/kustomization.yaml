@@ -8,4 +8,4 @@ resources:
 images:
 - name: LOG_OUTPUT/IMAGE
   newName: 3nd3r1/log-output
-  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
+  newTag: b1121d0e2a4d7ec62d19c45927a3a193cfdec115
