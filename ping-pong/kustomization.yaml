@@ -7,4 +7,4 @@ resources:
 images:
 - name: PING_PONG/IMAGE
   newName: 3nd3r1/ping-pong
-  newTag: e51cda8025a4ccc7b99d16176e3584093ac8a2ef
+  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
