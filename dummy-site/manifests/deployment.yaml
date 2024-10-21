@@ -1,0 +1,31 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: system
+  labels:
+    control-plane: dummysite-controller
+    app.kubernetes.io/name: controller
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dummysite-controller-dep
+  namespace: system
+  labels:
+    control-plane: dummysite-controller
+    app.kubernetes.io/name: controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: dummysite-controller
+  template:
+    metadata:
+      labels:
+        control-plane: dummysite-controller
+    spec:
+      serviceAccountName: dummysite-controller-account
+      containers:
+        - name: dummysite-controller
+          image: 3nd3r1/dummysite-controller:latest
