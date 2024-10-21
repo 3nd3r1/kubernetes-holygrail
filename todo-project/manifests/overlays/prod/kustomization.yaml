@@ -29,16 +29,16 @@ namePrefix: prod-
 images:
 - name: TODO_PROJECT_BACKEND/IMAGE
   newName: 3nd3r1/todo-project-backend
-  newTag: v1
+  newTag: v2
 - name: TODO_PROJECT_BACKUP_AGENT/IMAGE
   newName: 3nd3r1/todo-project-backup-agent
-  newTag: v1
+  newTag: v2
 - name: TODO_PROJECT_BROADCASTER/IMAGE
   newName: 3nd3r1/todo-project-broadcaster
-  newTag: v1
+  newTag: v2
 - name: TODO_PROJECT_FRONTEND/IMAGE
   newName: 3nd3r1/todo-project-frontend
-  newTag: v1
+  newTag: v2
 - name: TODO_PROJECT_IMAGENATOR/IMAGE
   newName: 3nd3r1/todo-project-imagenator
-  newTag: v1
+  newTag: v2
