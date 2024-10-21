@@ -26,16 +26,16 @@ namePrefix: staging-
 images:
 - name: TODO_PROJECT_BACKEND/IMAGE
   newName: 3nd3r1/todo-project-backend
-  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
+  newTag: b1121d0e2a4d7ec62d19c45927a3a193cfdec115
 - name: TODO_PROJECT_BACKUP_AGENT/IMAGE
   newName: 3nd3r1/todo-project-backup-agent
-  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
+  newTag: b1121d0e2a4d7ec62d19c45927a3a193cfdec115
 - name: TODO_PROJECT_BROADCASTER/IMAGE
   newName: 3nd3r1/todo-project-broadcaster
-  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
+  newTag: b1121d0e2a4d7ec62d19c45927a3a193cfdec115
 - name: TODO_PROJECT_FRONTEND/IMAGE
   newName: 3nd3r1/todo-project-frontend
-  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
+  newTag: b1121d0e2a4d7ec62d19c45927a3a193cfdec115
 - name: TODO_PROJECT_IMAGENATOR/IMAGE
   newName: 3nd3r1/todo-project-imagenator
-  newTag: 79b81ad77eddd0bcd6e01b22f2ca93d44da6d7e0
+  newTag: b1121d0e2a4d7ec62d19c45927a3a193cfdec115
