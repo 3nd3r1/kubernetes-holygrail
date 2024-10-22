@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikipedia-reader-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikipedia-reader
+  template:
+    metadata:
+      labels:
+        app: wikipedia-reader
+    spec:
+      volumes:
+        - name: html-data
+          emptyDir: {}
+      initContainers:
+        - name: initcontainer
+          image: mwendler/wget
+          command: ["sh", "-c"]
+          args:
+            - |
+              echo "Downloading Kubernetes Wikipedia Home Page..."
+              wget -mpEk https://en.wikipedia.org/wiki/Kubernetes -P /wikipedia -nH -nd --no-check-certificate
+              mv /wikipedia/Kubernetes.html /wikipedia/index.html
+          volumeMounts:
+            - name: html-data
+              mountPath: /wikipedia
+      containers:
+        - image: nginx
+          name: main
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html-data
+              mountPath: /usr/share/nginx/html
+        - image: mwendler/wget
+          name: sidecar
+          command: ["sh", "-c"]
+          args:
+            - |
+              while true; do
+                random_minutes=$(( ($RANDOM % 15) + 5 ))
+                echo "Sleeping for $random_minutes minutes..."
+                sleep $random_minutes"m"
+                rm -rf /wikipedia/*
+                echo "Downloading Random Wikipedia Page..."
+                wget -mpEk https://en.wikipedia.org/wiki/Special:Random -P /wikipedia -nH -nd --no-check-certificate
+                mv /wikipedia/Special:Random.html /wikipedia/index.html
+              done
+          volumeMounts:
+            - name: html-data
+              mountPath: /wikipedia
