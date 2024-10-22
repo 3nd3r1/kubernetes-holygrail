@@ -1,5 +1,5 @@
 ---
-name: Todo Project - Build, Publish and Deploy GKE
+name: GKE - Todo Project - Build, Publish and Deploy GKE
 
 on:
   push:

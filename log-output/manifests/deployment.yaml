@@ -1,10 +1,9 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: log-output-dep
   labels:
     project: log-output
+  name: log-output-dep
 spec:
   replicas: 1
   selector:
@@ -12,37 +11,40 @@ spec:
       app: log-output
   template:
     metadata:
+      annotations:
+        linkerd.io/inject: enabled
       labels:
         app: log-output
     spec:
-      volumes:
-        - name: config-volume
-          configMap:
-            name: log-output-cm
-            items:
-              - key: information.txt
-                path: information.txt
       containers:
-        - name: main
-          image: 3nd3r1/log-output:latest
-          readinessProbe:
-            initialDelaySeconds: 10
-            periodSeconds: 5
-            httpGet:
-              path: /healthz
-              port: 8080
-          ports:
-            - containerPort: 8080
-          resources:
-            limits:
-              memory: "100Mi"
-              cpu: "10m"
-          env:
-            - name: MESSAGE
-              valueFrom:
-                configMapKeyRef:
-                  name: log-output-cm
-                  key: MESSAGE
-          volumeMounts:
-            - name: config-volume
-              mountPath: /usr/src/app/data
+      - env:
+        - name: MESSAGE
+          valueFrom:
+            configMapKeyRef:
+              key: MESSAGE
+              name: log-output-cm
+        image: 3nd3r1/log-output:latest
+        name: main
+        ports:
+        - containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 10m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /usr/src/app/data
+          name: config-volume
+      volumes:
+      - configMap:
+          items:
+          - key: information.txt
+            path: information.txt
+          name: log-output-cm
+        name: config-volume
+---

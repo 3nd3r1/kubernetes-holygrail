@@ -1,5 +1,5 @@
 ---
-name: Todo Project - Branch Deleted GKE Cleanup
+name: GKE - Todo Project - Branch Deleted GKE Cleanup
 
 on:
   delete:

@@ -14,16 +14,24 @@ kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/rele
 kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
+# Install linkerd
+linkerd install --crds | kubectl apply -f -
+linkerd install | kubectl apply -f -
+linkerd viz install | kubectl apply -f -
+
 # Deploy ping-pong and log-output
-#kubectl create namespace applications --dry-run=client -o yaml | kubectl apply -f -
-#kubectl config set-context --current --namespace=applications
-#sops --decrypt ./ping-pong/manifests/secrets/secret.enc.yaml | kubectl apply -f -
-#kubectl apply -k ./ping-pong/
-#kubectl apply -k ./log-output/
-#kubectl wait --for=condition=ready pod -l project=ping-pong --timeout=300s
-#kubectl wait --for=condition=ready pod -l project=log-output --timeout=300s
+echo "Deploying ping-pong and log-output"
+kubectl create namespace applications --dry-run=client -o yaml | kubectl apply -f -
+kubectl config set-context --current --namespace=applications
+sops --decrypt ./ping-pong/manifests/secrets/secret.enc.yaml | kubectl apply -f -
+kubectl apply -k ./ping-pong/
+kubectl apply -k ./log-output/
+echo "Waiting for ping-pong and log-output:"
+kubectl wait --for=condition=ready pod -l project=ping-pong --timeout=300s
+kubectl wait --for=condition=ready pod -l project=log-output --timeout=300s
 
 # Setup todo-project
+echo "Deploying todo-project"
 kubectl create namespace production --dry-run=client -o yaml | kubectl apply -f -
 kubectl create namespace staging --dry-run=client -o yaml | kubectl apply -f -
 sops --decrypt ./todo-project/manifests/secrets/secret.enc.yaml | kubectl apply -n production -f -
