@@ -23,13 +23,20 @@ func main() {
 
 	isReady := false
 
+	pingPongUrl, ok := os.LookupEnv("PING_PONG_URL")
+	if !ok {
+		pingPongUrl = "http://ping-pong-svc:2345/pingpong"
+	}
+
 	go func() {
 		for {
-			res, err := http.Get("http://ping-pong-svc:2345/pingpong")
+			res, err := http.Get(pingPongUrl)
 			if err == nil && res.StatusCode == 200 {
 				isReady = true
 				break
 			}
+			fmt.Printf("Can't reach %v, retrying in 5 seconds...\n", pingPongUrl)
+			time.Sleep(5 * time.Second)
 		}
 	}()
 
@@ -48,7 +55,7 @@ func main() {
 			return
 		}
 
-		res, err := http.Get("http://ping-pong-svc:2345/pingpong")
+		res, err := http.Get(pingPongUrl)
 		if err != nil {
 			ctx.String(500, err.Error())
 			return

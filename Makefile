@@ -54,9 +54,9 @@ deploy-todo-project:
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 	# Install linkerd
-	linkerd install --crds | kubectl apply -f -
-	linkerd install | kubectl apply -f -
-	linkerd viz install | kubectl apply -f -
+	linkerd install --crds | kubectl apply -f - || true
+	linkerd install | kubectl apply -f - || true
+	linkerd viz install | kubectl apply -f - || true
 
 	# Setup todo-project
 	echo "Deploying todo-project"
@@ -75,9 +75,9 @@ deploy-todo-project:
 
 deploy-applications:
 	# Install linkerd
-	linkerd install --crds | kubectl apply -f -
-	linkerd install | kubectl apply -f -
-	linkerd viz install | kubectl apply -f -
+	linkerd install --crds | kubectl apply -f - || true
+	linkerd install | kubectl apply -f - || true
+	linkerd viz install | kubectl apply -f - || true
 
 	# Deploy ping-pong and log-output
 	echo "Deploying ping-pong and log-output"

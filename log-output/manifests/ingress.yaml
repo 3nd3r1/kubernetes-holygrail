@@ -13,13 +13,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: log-output-svc
+                name: log-output
                 port:
-                  number: 3456
+                  number: 8080
           - path: /pingpong
             pathType: Prefix
             backend:
               service:
-                name: ping-pong-svc
+                name: ping-pong
                 port:
-                  number: 2345
+                  number: 8080
