@@ -69,3 +69,32 @@ Completed 4/5 parts
 ### Which is better?
 
 If one had to choose, overall Azure Kubernetes Service (AKS) is better as it is much more flexible and powerful. However, DigitalOcean is still a very good option depending on circumstances.
+
+## CNCF Landscape
+
+Marked all products that I have used and their dependencies.
+
+green = used
+orange = dependency
+
+![CNCF Landscape](./script-answers/landscape.png)
+
+| What                                     | How                                                                                                  |
+|------------------------------------------|------------------------------------------------------------------------------------------------------|
+| Helm                                     | Used to install prometheus in the course and outside of the course for various projects              |
+| Argo                                     | Used in the course for rollouts and GitOps and outside of the course                                 |
+| ArtifactHUB                              | Outside of course for hosting files                                                                  |
+| MariaDB, Mysql, Redis, Timescale, MongoD | Used outside of course                                                                               |
+| PostgreSQL                               | Used in the course for the database of services                                                      |
+| Kubernetes                               | Used in the course obviously                                                                         |
+| Knative                                  | Used in the course in the serverless part                                                            |
+| Istio, Linkerd                           | Used in the course when learning service meshes (I tried Istio even when it wasn't part of material) |
+| CoreDNS                                  | Indirectly used as dependency of k3d, kubernetes and all service providers like GKE                  |
+| etcd                                     | Indirectly used as dependency of Kubernetes                                                          |
+| CNI, Flannel                             | Indirectly used by Kubernetes, Docker and other various products                                     |
+| Containerd                               | Dependency of Kubernetes for running the containers. Used knowingly!                                 |
+| Prometheus                               | Used in the course for the AnalysisTemplate and outside of the course                                |
+| Grafana                                  | Used outside of course                                                                               |
+| AWS, Heroku                              | Used outside of course                                                                               |
+| K3s, Rancher                             | Used outside of course                                                                               |
+| GKE                                      | Used alot in the course in part 3                                                                    |
