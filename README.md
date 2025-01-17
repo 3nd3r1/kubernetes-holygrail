@@ -2,6 +2,10 @@
 
 I use this repository for testing various Kubernetes features and concepts. Each project is a separate directory with its own README.md file.
 
+## Requirements
+
+- You need to have [GNU Make](https://www.gnu.org/software/make/) to run the make commands.
+
 ## How to get a cluster?
 
 All of the projects obviously require a Kubernetes cluster. Don't have one? No worries.
