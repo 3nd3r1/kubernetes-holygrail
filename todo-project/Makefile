@@ -58,3 +58,10 @@ deploy-prod: install
 uninstall:
 	kubectl delete namespace staging --ignore-not-found
 	kubectl delete namespace production --ignore-not-found
+
+argocd-dashboard:
+	echo "Portforwarding argocd server"
+	kubectl port-forward svc/argocd-server -n argocd 8085:443 &
+	echo "Argocd dashboard available at http://locahost:8085"
+	xdg-open https://localhost:8085
+
