@@ -5,3 +5,5 @@
 - op: replace
   path: /spec/template/spec/containers/0/env/1/value
   value: nats://staging-todo-project-nats:4222
+- op: remove
+  path: /spec/template/spec/containers/0/env/2

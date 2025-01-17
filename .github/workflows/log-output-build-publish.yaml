@@ -28,7 +28,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - name: Build
-        working-directory: ./log-output
+        working-directory: ./ping-and-log/log-output
         run: |-
           docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/${LOG_OUTPUT_IMAGE}:${GITHUB_SHA}" -f ./build/Dockerfile .
 
@@ -37,14 +37,14 @@ jobs:
           docker push "${{ secrets.DOCKERHUB_USERNAME }}/${LOG_OUTPUT_IMAGE}:${GITHUB_SHA}"
 
       - name: Update image in kustomization.yaml
-        working-directory: ./log-output
+        working-directory: ./ping-and-log/log-output
         run: |-
           kustomize edit set image LOG_OUTPUT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${LOG_OUTPUT_IMAGE}:${GITHUB_SHA}
 
       - name: Commit kustomization.yaml
         uses: EndBug/add-and-commit@v9
         with:
-          add: "./log-output/kustomization.yaml"
+          add: "./ping-and-log/log-output/kustomization.yaml"
           fetch: true
           pull: "--rebase --autostash"
           message: uplifted log-ouput to ${{ github.sha }}

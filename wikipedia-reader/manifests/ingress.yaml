@@ -5,7 +5,8 @@ metadata:
   name: wikipedia-reader-ingress
 spec:
   rules:
-    - http:
+    - host: wikipedia-reader.fbi.com
+      http:
         paths:
           - path: /
             pathType: Prefix

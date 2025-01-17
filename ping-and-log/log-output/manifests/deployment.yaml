@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    project: log-output
+  name: log-output-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: log-output
+    spec:
+      containers:
+        - env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  key: MESSAGE
+                  name: log-output-cm
+          image: 3nd3r1/log-output:latest
+          name: main
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 10m
+              memory: 100Mi
+          volumeMounts:
+            - mountPath: /usr/src/app/data
+              name: config-volume
+      volumes:
+        - configMap:
+            items:
+              - key: information.txt
+                path: information.txt
+            name: log-output-cm
+          name: config-volume
+---
+

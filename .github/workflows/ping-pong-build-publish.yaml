@@ -28,7 +28,7 @@ jobs:
         uses: imranismail/setup-kustomize@v2
 
       - name: Build
-        working-directory: ./ping-pong
+        working-directory: ./ping-and-log/ping-pong
         run: |-
           docker build -t "${{ secrets.DOCKERHUB_USERNAME }}/${PING_PONG_IMAGE}:${GITHUB_SHA}" -f ./build/Dockerfile .
 
@@ -37,14 +37,14 @@ jobs:
           docker push "${{ secrets.DOCKERHUB_USERNAME }}/${PING_PONG_IMAGE}:${GITHUB_SHA}"
 
       - name: Update image in kustomization.yaml
-        working-directory: ./ping-pong
+        working-directory: ./ping-and-log/ping-pong
         run: |-
           kustomize edit set image PING_PONG/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${PING_PONG_IMAGE}:${GITHUB_SHA}
 
       - name: Commit kustomization.yaml
         uses: EndBug/add-and-commit@v9
         with:
-          add: "./ping-pong/kustomization.yaml"
+          add: "./ping-and-log/ping-pong/kustomization.yaml"
           fetch: true
           pull: "--rebase --autostash"
           message: uplifted ping-pong to ${{ github.sha }}

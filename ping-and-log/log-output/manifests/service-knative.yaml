@@ -1,0 +1,48 @@
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: log-output
+  labels:
+    project: log-output
+spec:
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: log-output
+    spec:
+      containers:
+        - name: log-output
+          image: LOG_OUTPUT/IMAGE
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  key: MESSAGE
+                  name: log-output-cm
+            - name: PING_PONG_URL
+              value: http://ping-pong.ping-and-log.svc.cluster.local/pingpong
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 10m
+              memory: 100Mi
+          volumeMounts:
+            - mountPath: /usr/src/app/data
+              name: config-volume
+      volumes:
+        - configMap:
+            items:
+              - key: information.txt
+                path: information.txt
+            name: log-output-cm
+          name: config-volume
