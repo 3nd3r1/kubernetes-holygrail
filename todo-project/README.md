@@ -15,11 +15,16 @@ You need [Linkerd](https://linkerd.io/2.17/getting-started/#step-1-install-the-c
 
 ### Staging
 
-Run
+1. Create a Kubernetes cluster and set the kubectl context to that cluster.
+2. Run
 
 ```bash
 make deploy-staging
 ```
+
+The project will be deployed to the namespace staging.
+
+The project will be available at [staging.todo-project.fbi.com:8081](http://staging.todo-project.fbi.com:8081).
 
 ### Development
 
