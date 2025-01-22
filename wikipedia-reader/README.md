@@ -1,6 +1,6 @@
 # Wikipedia Reader
 
-Simple deployment that at random intervals downloads a random Wikipedia article and servers it via ingress.
+Simple deployment that at random intervals downloads a random Wikipedia article and serves it via http.
 
 This project was meant for practicing initContainers and sidecars.
 
