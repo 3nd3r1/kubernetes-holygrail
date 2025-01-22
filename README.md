@@ -14,7 +14,7 @@ Just install [Docker](https://www.docker.com/get-started), [Kubectl](https://kub
 Then, run the following command:
 
 ```bash
-bob create-cluster
+make create-cluster
 ```
 
 This will create a small cluster that is actually a bunch of Docker containers.
