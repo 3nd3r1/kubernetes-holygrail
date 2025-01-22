@@ -1,4 +1,4 @@
-# Kubernetes Holygray
+# Kubernetes Holygrail
 
 I use this repository for testing various Kubernetes features and concepts. Each project is a separate directory with its own README.md file.
 
